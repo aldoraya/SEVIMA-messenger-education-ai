@@ -3,7 +3,7 @@ import { SunIcon } from "@heroicons/react/24/outline";
 import { BoltIcon } from "@heroicons/react/24/outline";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
-function homePage() {
+const homePage = () => {
   const texts = [
     {
       id: 1,
