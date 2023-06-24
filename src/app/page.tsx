@@ -2,12 +2,13 @@ import React from "react";
 import { SunIcon } from "@heroicons/react/24/outline";
 import { BoltIcon } from "@heroicons/react/24/outline";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import Input from "@/components/Input/Input";
 
 const homePage = () => {
   const texts = [
     {
       id: 1,
-      icon: <SunIcon className="w-6 h-6" />,
+      icon: <SunIcon className="w-6 h-6 text-[#17A9FD]" />,
       title: "Contoh",
       txt1: '"Apa perbedaan antara mitosis dan meiosis?"',
       txt2: '"Jelaskan prinsip dasar hukum termodinamika pertama."',
@@ -15,7 +16,7 @@ const homePage = () => {
     },
     {
       id: 2,
-      icon: <BoltIcon className="w-6 h-6" />,
+      icon: <BoltIcon className="w-6 h-6 text-[#17A9FD]" />,
       title: "Kemampuan",
       txt1: "Ubah model HWork.ai yang akan digunakan",
       txt2: "Riwayat chat disimpan di Firebase Firestore",
@@ -23,7 +24,7 @@ const homePage = () => {
     },
     {
       id: 3,
-       icon: <ExclamationTriangleIcon className="w-6 h-6" />,
+       icon: <ExclamationTriangleIcon className="w-6 h-6 text-[#17A9FD]" />,
       title: "Keterbatasan",
       txt1: "Terkadang mendapatkan informasi yang keliru",
       txt2: "Terkadang mendapatkan intruksi atau konten berbahaya",
@@ -32,7 +33,7 @@ const homePage = () => {
   ];
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen w-full">
+    <div className="flex flex-col justify-center items-center min-h-[120vh] w-full z-0">
       <h1 className="text-xl md:text-2xl lg:text-4xl font-bold text-[#17A9FD]">
         HWork.ai
       </h1>
@@ -51,6 +52,7 @@ const homePage = () => {
           );
         })}
       </div>
+    <Input />
     </div>
   );
 }
