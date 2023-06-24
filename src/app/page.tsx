@@ -7,7 +7,6 @@ import { SunIcon } from "@heroicons/react/24/outline";
 import { BoltIcon } from "@heroicons/react/24/outline";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import SideBar from "@/components/Sidebar/SideBar";
-import Input from "@/components/Input/Input";
 import Login from "@/components/Login/Login";
 
 const HomePage = () => {
@@ -52,7 +51,7 @@ const HomePage = () => {
     <div>
       {status === "loading" && (
         <div className="flex justify-center items-center h-screen">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-100"></div>
         </div>
       )}
        {session && (
@@ -80,7 +79,6 @@ const HomePage = () => {
                 );
               })}
             </div>
-            <Input />
           </div>
         </div>
       )}
