@@ -1,22 +1,25 @@
-"use client"
+"use client";
 
 import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { TrashIcon } from "@heroicons/react/24/outline";
-import { ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
 import { useCollection } from "react-firebase-hooks/firestore";
 import NewChat from "../NewChat/NewChat";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { collection } from "firebase/firestore/lite";
 import { db } from "../../../firebase";
+import ChatRow from "../ChatRow/ChatRow";
+import { collection, orderBy, query } from "firebase/firestore";
 
 const SideBar = () => {
   const { data: session } = useSession();
 
   const [chats, loading, error] = useCollection(
-    session && collection(db, 'users', session?.user?.email!, 'chats')
-  )
+    session &&
+      query(
+        collection(db, 'users', session?.user?.email!, 'chats'),
+        orderBy('createdAt', 'asc')
+      )
+  );
 
   return (
     <div className="lg:mr-56">
@@ -28,27 +31,26 @@ const SideBar = () => {
           </button>
         </div>
         <div className="mt-14 flex flex-col">
-          <button className="flex space-x-2 px-2 rounded-lg py-2 w-full hover:bg-blue-100 hover:text-[#111] items-center">
-            <ChatBubbleLeftIcon className="w-4 h-4" />
-            <p>AI Populer saat ini</p>
-            <button className="flex flex-1 justify-end">
-              <TrashIcon className="w-4 h-4" />
-            </button>
-          </button>
+          {chats?.docs.map((chat) => (
+            <ChatRow key={chat.id} id={chat.id} />
+          ))}
         </div>
         <div className="fixed bottom-0 left-0 p-2 w-[60%] md:w-[16rem] h-max">
-          { session && (
-          <button onClick={() => signOut()} className="flex space-x-2 px-2 rounded-lg py-2 w-full hover:bg-blue-100 hover:text-[#111] items-center">        
+          {session && (
+            <button
+              onClick={() => signOut()}
+              className="flex space-x-4 px-2 rounded-lg py-2 w-full hover:bg-blue-100 hover:text-[#111] items-center"
+            >
               <Image
-              src={session?.user?.image || "Profile"} 
-              width="30"
-              height="30"
-              alt="Profile Google"
+                src={session?.user?.image || "Profile"}
+                width="30"
+                height="30"
+                alt="Profile Google"
               />
-            <div className="w-full flex flex-1 justify-end">
-              <p>{session?.user?.name || "Username"}</p>
-            </div>
-          </button>
+             
+                <p>{session?.user?.name || "Username"}</p>
+           
+            </button>
           )}
         </div>
       </div>
