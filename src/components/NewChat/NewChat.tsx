@@ -18,7 +18,7 @@ const NewChat = () => {
       }
     );
 
-    router.push('/chat/${doc.id}');
+    router.push(`/chat/${doc.id}`);
   };
 
   return (

@@ -1,7 +1,7 @@
-import { Query, query } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import admin from "firebase-admin";
 import { adminDb } from "../../../firebase.admin";
+import query from "@/lib/queryapi";
 
 type Data = {
   answer: string;
@@ -24,8 +24,7 @@ export default async function handler(
     }
 
     // ChatGPT Query
-    const queryResult: Query<unknown> = await query(prompt, chatId, model);
-    const response: string = queryResult.toString(); // Convert to string
+    const response = await query(prompt, chatId, model);
 
     const message: Message = {
         text: response || "ChatGPT was unable to find an answer for that!",
@@ -38,12 +37,12 @@ export default async function handler(
     };
 
     await adminDb
-    .collection("users")
-    .doc(session?.user?.email)
-    .collection("chats")
-    .doc (chatId)
-    .collection("messages")
-    .add(message);
+      .collection("users")
+      .doc(session?.user?.email)
+      .collection("chats")
+      .doc(chatId)
+      .collection("messages")
+      .add(message);
 
      res.status(200).json({ answer: message.text });
 }

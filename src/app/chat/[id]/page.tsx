@@ -13,9 +13,11 @@ function ChatPage({ params: { id } }: Props) {
   return (
     <div className="flex">
       <SideBar />
-      <div className="flex flex-col justify-center items-center min-h-[120vh] w-full z-0 overflow-hidden">
+      <div className="flex flex-col min-h-[120vh] w-full z-0 overflow-hidden">
         <Chat chatId={id} />
-        <Input chatId={id} />
+        <div className="flex flex-1 justify-center">
+          <Input chatId={id} />
+        </div>
       </div>
     </div>
   );

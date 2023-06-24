@@ -20,8 +20,10 @@ const Input = ({ chatId }: Props) => {
   const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!prompt) return;
+
     const input = prompt.trim();
     setPrompt("");
+
     const message: Message = {
       text: input,
       createdAt: serverTimestamp(),
@@ -37,16 +39,15 @@ const Input = ({ chatId }: Props) => {
     await addDoc(
       collection(
         db,
-        "users",
+        'users',
         session?.user?.email!,
-        "chats",
+        'chats',
         chatId,
-        "messages"
+        'messages'
       ),
       message
     );
 
-    // Toast notification
     const notification = toast.loading("bentar....");
 
     await fetch("/api/askQuestion", {
@@ -58,17 +59,20 @@ const Input = ({ chatId }: Props) => {
         prompt: input,
         chatId,
         model,
-        session
+        session,
       })
     }).then(() => {
-        toast.success("HWork.ai telah menjawab!")
+        toast.success("HWork.ai telah menjawab!", {
+          id: notification,
+        })
     });
   };
 
   return (
-    <form className="fixed w-full h-[20%] bg-transparent bottom-0 px-20 flex items-center">
+    <form onSubmit={sendMessage} className="fixed w-full h-[20%] bg-transparent bottom-0 px-20 flex items-center">
       <input
         type="text"
+        value={prompt}
         disabled={!session}
         onChange={(e) => setPrompt(e.target.value)}
         placeholder="Kirim pertanyaan..."
