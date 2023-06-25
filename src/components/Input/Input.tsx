@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { FormEvent, useState } from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
@@ -15,7 +15,7 @@ const Input = ({ chatId }: Props) => {
   const [prompt, setPrompt] = useState("");
   const { data: session } = useSession();
 
-  const model = "text-blue-100"
+  const model = "text-blue-100";
 
   const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ const Input = ({ chatId }: Props) => {
     const input = prompt.trim();
     setPrompt("");
 
-    const message: Message = {
+    const message = {
       text: input,
       createdAt: serverTimestamp(),
       user: {
@@ -36,40 +36,54 @@ const Input = ({ chatId }: Props) => {
       },
     };
 
-    await addDoc(
-      collection(
-        db,
-        'users',
-        session?.user?.email!,
-        'chats',
-        chatId,
-        'messages'
-      ),
-      message
-    );
+    try {
+      await addDoc(
+        collection(
+          db,
+          "users",
+          session?.user?.email!,
+          "chats",
+          chatId,
+          "messages"
+        ),
+        message
+      );
 
-    const notification = toast.loading("bentar....");
+      const notification = toast.loading("bentar....");
 
-    await fetch("/api/askQuestion", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt: input,
-        chatId,
-        model,
-        session,
-      })
-    }).then(() => {
+      const response = await fetch("/api/askQuestion", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: input,
+          chatId,
+          model,
+          session,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
         toast.success("HWork.ai telah menjawab!", {
           id: notification,
-        })
-    });
+        });
+        // Process the response data as needed
+      } else {
+        throw new Error("API request failed");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast.error("Failed to send message. Please try again.");
+    }
   };
 
   return (
-    <form onSubmit={sendMessage} className="fixed w-full h-[20%] bg-transparent bottom-0 px-20 flex items-center">
+    <form
+      onSubmit={sendMessage}
+      className="fixed w-full h-[20%] bg-transparent bottom-0 px-20 flex items-center"
+    >
       <input
         type="text"
         value={prompt}
@@ -84,7 +98,7 @@ const Input = ({ chatId }: Props) => {
         className="relative top-6 left-10"
       >
         <div className="absolute right-10 -bottom-1 p-6 bg-blue-100 rounded-lg">
-          <PaperAirplaneIcon className="w-4 h-4 -rotate-45" />
+          <PaperAirplaneIcon className="w-4 h-4" />
         </div>
       </button>
     </form>
